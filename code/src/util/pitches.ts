@@ -1,7 +1,7 @@
 import seedrandom, { PRNG } from "seedrandom";
 
 const midi = "bright_acoustic_piano-mp3";
-const base = `https://github.com/gleitz/midi-js-soundfonts/raw/gh-pages/FatBoy/${midi}`;
+const base = `src/pitches/${midi}`;
 const audio = new Audio();
 
 export const pitchOptions: string[] = [
