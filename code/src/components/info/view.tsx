@@ -7,13 +7,17 @@ import {
   useContext,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { useGame } from "../game/service";
+import { today, useGame } from "../game/service";
 import Info from "lucide-solid/icons/info";
 import X from "lucide-solid/icons/x";
 import RotateCcw from "lucide-solid/icons/rotate-ccw";
+import Dice from "lucide-solid/icons/dice-5";
+import Calendar from "lucide-solid/icons/calendar";
+import { game_name } from "../../util/const";
 
 interface InfoDialogData {
   dialog_status: boolean;
+  random_game_mode: boolean;
 }
 
 type InfoDialog = [
@@ -21,6 +25,8 @@ type InfoDialog = [
   {
     close: () => void;
     open: () => void;
+    randomMode: () => void;
+    todayMode: () => void;
   }
 ];
 
@@ -28,9 +34,12 @@ const InfoDialogContext = createContext<InfoDialog>();
 
 export function InfoDialogProvider(props: { children: any }) {
   let [dialog_data, set_dialog] = makePersisted(
-    createStore<InfoDialogData>({ dialog_status: true }),
+    createStore<InfoDialogData>({
+      dialog_status: true,
+      random_game_mode: true,
+    }),
     {
-      name: "pitch_info-dialog",
+      name: game_name + "_info-dialog",
     }
   );
 
@@ -45,6 +54,12 @@ export function InfoDialogProvider(props: { children: any }) {
         set_dialog("dialog_status", true);
         document.body.style.position = "relative";
         document.body.style.overflowY = "hidden";
+      },
+      randomMode() {
+        set_dialog("random_game_mode", true);
+      },
+      todayMode() {
+        set_dialog("random_game_mode", false);
       },
     },
   ];
@@ -80,7 +95,7 @@ export function InfoButton() {
 }
 
 export function InfoDialog() {
-  const [isOpen, { close }] = useInfoDialog();
+  const [isOpen, { close, randomMode, todayMode }] = useInfoDialog();
   const [game, setGame] = useGame();
 
   return (
@@ -102,6 +117,25 @@ export function InfoDialog() {
           >
             <div>Pitch</div>
             <div class="flex gap-2">
+              <IconButton
+                icon={Dice}
+                onClick={() => {
+                  randomMode();
+                  const random_game = Math.floor(Math.random() * 500);
+                  localStorage.removeItem(game_name + "_game");
+                  setGame(today(random_game));
+                  close();
+                }}
+              />
+              <IconButton
+                icon={Calendar}
+                onClick={() => {
+                  localStorage.removeItem(game_name + "_game");
+                  setGame(today(game.gamekey));
+                  todayMode();
+                  close();
+                }}
+              />
               <IconButton
                 icon={RotateCcw}
                 onClick={() => {

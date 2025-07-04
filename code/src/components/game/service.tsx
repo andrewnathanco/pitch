@@ -25,9 +25,16 @@ export function gamekey() {
 export function today(gamekey: number): Game {
   const rng = seedrandom(gamekey.toString());
 
-  const pitches = [];
+  const pitches: string[] = [];
   for (let i = 0; i < 9; i++) {
-    const pitch = pitchOptions[Math.floor(rng() * pitchOptions.length)];
+    let pitch = pitchOptions[Math.floor(rng() * pitchOptions.length)];
+
+    let iter = 0;
+    while (pitches.includes(pitch) && iter < 1000) {
+      pitch = pitchOptions[Math.floor(rng() * pitchOptions.length)];
+      iter++;
+    }
+
     pitches.push(pitch);
   }
 

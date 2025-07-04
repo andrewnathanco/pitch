@@ -208,7 +208,7 @@ function NoteTile(props: {
           {props.note}
         </div>
       ) : (
-        <></>
+        <div class="flex items-center justify-center gap-2 bg-transparent"></div>
       )}
     </button>
   );
