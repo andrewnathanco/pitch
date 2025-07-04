@@ -1,17 +1,15 @@
 import { makePersisted } from "@solid-primitives/storage";
+import seedrandom from "seedrandom";
 import { createContext, useContext } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
-import { options } from "../../util/colors";
+import { pitchOptions } from "../../util/pitches";
 
 export interface Game {
   gamekey: number;
-  numcorrect: number;
-  color: string;
-  ingredients: string[];
-  correct: string[];
-  all: string[];
-  selected: string[];
-  guesses: number[];
+  pitches: string[];
+  selectedPitch?: string;
+  selectedBox?: number;
+  revealedPitches: string[];
 }
 
 export function gamekey() {
@@ -25,19 +23,18 @@ export function gamekey() {
 }
 
 export function today(gamekey: number): Game {
-  const numcorrect = 3;
-  const noise = 0.8;
-  const { base, correct, all } = options(gamekey, numcorrect, 16, noise);
+  const rng = seedrandom(gamekey.toString());
+
+  const pitches = [];
+  for (let i = 0; i < 9; i++) {
+    const pitch = pitchOptions[Math.floor(rng() * pitchOptions.length)];
+    pitches.push(pitch);
+  }
 
   return {
     gamekey,
-    guesses: [],
-    correct: [],
-    color: base,
-    ingredients: correct,
-    numcorrect,
-    all,
-    selected: [],
+    pitches,
+    revealedPitches: [],
   };
 }
 

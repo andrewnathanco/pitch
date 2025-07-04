@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 * {
-  @apply dark:bg-woodsmoke-900 dark:text-woodsmoke-50 bg-woodsmoke-50 text-woodsmoke-950;
+  @apply bg-woodsmoke-50 text-woodsmoke-950;
   font-family: Outfit;
   font-weight: 700;
 }
