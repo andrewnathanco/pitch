@@ -1,7 +1,7 @@
 import seedrandom, { PRNG } from "seedrandom";
 
 const midi = "bright_acoustic_piano-mp3";
-const base = `src/pitches/${midi}`;
+const base = `pitches/${midi}`;
 const audio = new Audio();
 
 export const pitchOptions: string[] = [
